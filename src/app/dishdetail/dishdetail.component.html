@@ -6,14 +6,14 @@ fxLayoutAlign.gt-md="space-around center"
 fxLayoutGap="5px" 
 fxLayoutGap.xs="0">
 
-<div fxFlex="40" *ngIf="dish" >
-    <mat-card >
+<div fxFlex="40" *ngIf="dish">
+    <mat-card  *ngIf="dish">
         <mat-card-header>
              <mat-card-title>
                  <h3>{{dish.name|uppercase}}</h3>
              </mat-card-title>
         </mat-card-header>
-        <img mat-card-image src="{{dish.image}}" alt={{dish.name}}>
+        <img mat-card-image src="{{BaseURL + dish.image}}" alt={{dish.name}}>
         <mat-card-content>
             <p>{{dish.description}}
         </mat-card-content>
@@ -25,24 +25,54 @@ fxLayoutGap.xs="0">
             <button mat-button [routerLink]="['/dishdetail', next]"><span class="fa fa-chevron-right fa-lg"></span></button>
         </mat-card-actions>
     </mat-card>
+    <div [hidden]="dish">
+        <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
+      </div>
 </div>
 
-<div fxFlex="40" *ngIf="dish">
+<div fxFlex="40" *ngIf="dish" >
   
   <mat-list >
         <h2 >COMMENTS</h2>
-  <mat-list-item *ngFor="let comment of dish.comments">
-    <h4 matLine>{{comment.comment}}</h4>
-    <p matLine>{{comment.rating}}Stars</p>
+  <mat-list-item *ngFor="let comments of dish.comments">
+    <h4 matLine>{{comments.comment}}</h4>
+    <p matLine>{{comments.rating}}Stars</p>
     <p matLine>
         <span>
-            --{{comment.author}} {{comment.date | date}}
+            --{{comments.author}} {{comments.date | date}}
         </span>
     </p>
   </mat-list-item>
+  <mat-list-item *ngIf="r">
+      <h4 matLine>{{r.comment}}</h4>
+      <p matLine *ngIf="r.rating">{{r.rating}}Stars</p>
+      <p matLine *ngIf="r.author">
+          <span>--{{r.author}}</span>
+      </p>
+  </mat-list-item>
   </mat-list>
-  <div [hidden]="dish">
-    <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
-  </div>
+  
+  <form novalidate [formGroup]="ratingForm" (ngSubmit)="onSubmit()">
+    <p>
+        <mat-form-field class="half-width" 
+        dividerColor="{{(formErrors.author) ? 'warn' : 'primary'}}">
+            <input matInput formControlName="author" placeholder="Name" type="text">
+            <mat-hint>
+                <span [hidden]="!(formErrors.author)">{{formErrors.author}}</span>
+              </mat-hint>
+        </mat-form-field>
+    </p>
+    <mat-slider min="1" max="5" value="5" thumbLabel tickInterval="1" aria-placeholder="Rating" formControlName="rating"></mat-slider>
+    <p>
+        <mat-form-field class="half-width" 
+        dividerColor="{{(formErrors.comment) ? 'warn' : 'primary'}}">
+            <textarea matInput placeholder="Your Comment" formControlName="comment" rows="12"></textarea>
+            <mat-hint>
+                <span [hidden]="!(formErrors.comment)">{{formErrors.comment}}</span>
+              </mat-hint>
+        </mat-form-field>
+    </p>
+    <button type="submit" [disabled]="ratingForm.invalid" mat-button class="background-primary text-floral-white">Submit</button>
+  </form>
 </div>
 </div>

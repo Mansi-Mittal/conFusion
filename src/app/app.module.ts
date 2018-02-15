@@ -2,10 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule,MatListModule,MatGridListModule, MatCardModule, MatButtonModule, MatDialogModule, MatCheckboxModule,
-         MatFormFieldModule,MatInputModule,MatSlideToggleModule,MatSelectModule,MatProgressSpinnerModule } from '@angular/material'; 
+         MatFormFieldModule,MatInputModule,MatSlideToggleModule,MatSelectModule,MatProgressSpinnerModule,MatSliderModule } from '@angular/material'; 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule} from '@angular/forms';
+import {HttpModule} from '@angular/http';
+import { baseURL } from './shared/baseurl';
 
 import 'hammerjs';
 
@@ -22,7 +24,7 @@ import { LoginComponent } from './login/login.component';
 import { DishService } from './services/dish.service';
 import { PromotionService } from './services/promotion.service';
 import { LeaderService } from './services/leader.service';
-
+import { ProcessHttpmsgService } from './services/process-httpmsg.service';
 
 import {AppRoutingModule} from './app-routing/app-routing.module';
 
@@ -41,11 +43,14 @@ import {AppRoutingModule} from './app-routing/app-routing.module';
   imports: [
     BrowserModule,BrowserAnimationsModule,MatToolbarModule,FlexLayoutModule,MatListModule,MatGridListModule,
     MatCardModule,MatButtonModule,AppRoutingModule,MatDialogModule,FormsModule,MatFormFieldModule,MatInputModule,
-    MatCheckboxModule,ReactiveFormsModule,MatSlideToggleModule,MatSelectModule,MatProgressSpinnerModule
+    MatCheckboxModule,ReactiveFormsModule,MatSlideToggleModule,MatSelectModule,MatProgressSpinnerModule,MatSliderModule,
+    HttpModule
   ],
   providers: [DishService,
          PromotionService,
-        LeaderService],
+        LeaderService,
+        {provide: 'BaseURL', useValue: baseURL},
+      ProcessHttpmsgService],
         entryComponents: [LoginComponent],
   bootstrap: [AppComponent]
 })
